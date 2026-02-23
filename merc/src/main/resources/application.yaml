@@ -6,4 +6,4 @@ spring:
     name: merc
   profiles:
     active:
-      - test
+      - dev
