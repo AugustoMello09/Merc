@@ -1,6 +1,6 @@
 package io.github.augustomello09.merc.entities;
 
-import io.github.augustomello09.merc.enums.StatusClient;
+import io.github.augustomello09.merc.enums.StatusState;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
@@ -36,13 +36,13 @@ public class Client {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status_client", nullable = false)
-    private StatusClient statusClient;
+    private StatusState statusClient;
 
     protected Client() {}
 
     public Client(String email, String cpf, String name) {
         validate(email, cpf, name);
-        this.statusClient = StatusClient.ACTIVE;
+        this.statusClient = StatusState.ACTIVE;
         this.creditLimit = BigDecimal.ZERO;
         this.internalScore = 0;
         this.createdAt = LocalDateTime.now();
@@ -85,7 +85,7 @@ public class Client {
         return internalScore;
     }
 
-    public StatusClient getStatusClient() {
+    public StatusState getStatusClient() {
         return statusClient;
     }
 
