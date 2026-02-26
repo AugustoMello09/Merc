@@ -1,6 +1,7 @@
 package io.github.augustomello09.merc.service;
 
 import io.github.augustomello09.merc.dtos.ProductDTOResponse;
+import io.github.augustomello09.merc.dtos.ProductSummaryDTO;
 import io.github.augustomello09.merc.entities.Product;
 import io.github.augustomello09.merc.enums.StatusState;
 import io.github.augustomello09.merc.mappers.ProductMapper;
@@ -11,7 +12,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
+import java.math.BigDecimal;
 
 @Service
 @RequiredArgsConstructor
@@ -24,6 +25,19 @@ public class ProductService {
     public Page<ProductDTOResponse> findCriticalProducts(Pageable pageable){
         Page<Product> productList = productRepository.findCriticalProducts(20, StatusState.ACTIVE, pageable);
         return productList.map(productMapper::toDto);
+    }
+
+    @Transactional(readOnly = true)
+    public Page<ProductDTOResponse> findByPrecoBetweenAndNomeStartingWithAndEstoqueNot(BigDecimal min, BigDecimal max,
+                                                                                       String starts, Pageable page) {
+         Page<Product> products = productRepository.findByPrecoBetweenAndNomeStartingWithAndEstoqueNot(min, max, starts, page);
+         return products.map(productMapper::toDto);
+    }
+
+    @Transactional(readOnly = true)
+    public Page<ProductSummaryDTO> findActiveProductSummaryOrderByPriceDesc(StatusState state, Pageable page) {
+        Page<ProductSummaryDTO> products = productRepository.findActiveProductSummaryOrderByPriceDesc(state, page);
+        return products.map(productMapper::toDtoTwo);
     }
 
 }
